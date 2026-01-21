@@ -14,5 +14,9 @@ export default async function ArticlesLayout({
   // if (!user) {
   //   return redirect("/login");
   // }
-  return <div> {children}</div>;
+  return (
+    <div className="flex-1 w-full flex flex-col">
+      {children}
+    </div>
+  );
 }

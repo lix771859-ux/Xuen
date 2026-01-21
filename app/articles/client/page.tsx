@@ -81,9 +81,39 @@ export default function Page() {
   }, [supabase]);
 
   return (
-    <>
-      <pre>{JSON.stringify(articles, null, 2)}</pre>
-      <AddArticleForm />
-    </>
+    <div className="flex-1 w-full flex flex-col gap-8 items-center py-8">
+      <div className="w-full max-w-4xl px-4">
+        <h1 className="text-3xl font-bold mb-2">文章管理（客户端）</h1>
+        <p className="text-muted-foreground mb-8">使用客户端实时订阅功能</p>
+        
+        <div className="grid gap-8 md:grid-cols-2">
+          <div>
+            <h2 className="text-xl font-semibold mb-4">添加新文章</h2>
+            <AddArticleForm />
+          </div>
+          
+          <div>
+            <h2 className="text-xl font-semibold mb-4">文章列表 ({articles.length})</h2>
+            <div className="space-y-3">
+              {articles.length === 0 ? (
+                <p className="text-muted-foreground text-sm">暂无文章，请添加第一篇文章</p>
+              ) : (
+                articles.map((article) => (
+                  <div
+                    key={article.id}
+                    className="p-4 border rounded-lg bg-card hover:bg-accent/50 transition-colors"
+                  >
+                    <h3 className="font-medium">{article.title}</h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      创建于: {new Date(article.created_at).toLocaleString('zh-CN')}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

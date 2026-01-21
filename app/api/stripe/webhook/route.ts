@@ -2,12 +2,25 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { sendPaymentSuccessEmail } from '@/src/lib/email';
+import { createClient } from '@supabase/supabase-js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET! as string, {
   apiVersion: '2025-12-15.clover',
 });
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
+// 创建管理员权限的 Supabase 客户端（用于 webhook）
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+);
 
 export async function POST(req: Request) {
   console.log('📩 Webhook received request');
@@ -48,13 +61,42 @@ export async function POST(req: Request) {
       const customerEmail = session.customer_email || session.customer_details?.email;
       const amount = session.amount_total || 0;
       
-      // 测试环境发给您，生产环境发给客户
+      // 💾 保存到数据库
+      try {
+        const { data, error } = await supabaseAdmin
+          .from('payments')
+          .insert({
+            stripe_session_id: session.id,
+            stripe_customer_id: session.customer,
+            customer_email: customerEmail,
+            amount: amount,
+            currency: session.currency,
+            status: 'completed',
+            metadata: session.metadata || {},
+          })
+          .select()
+          .single();
+        
+        if (error) {
+          console.error('❌ 保存支付记录失败:', error);
+        } else {
+          console.log('✅ 支付记录已保存:', data.id);
+        }
+      } catch (dbError) {
+        console.error('❌ 数据库错误:', dbError);
+      }
+      
+      // 📧 异步发送邮件（不阻塞响应）
       const emailTo = process.env.NODE_ENV === 'production' 
         ? customerEmail || 'lix771859@gmail.com'
         : 'lix771859@gmail.com';
       
       console.log('📧 准备发送邮件到:', emailTo);
-      await sendPaymentSuccessEmail(emailTo, amount, session.id);
+      
+      // 不等待邮件发送完成，立即返回响应
+      sendPaymentSuccessEmail(emailTo, amount, session.id)
+        .then(() => console.log('✅ 邮件发送成功'))
+        .catch((err) => console.error('❌ 邮件发送失败:', err));
     }
 
     console.log('📤 Sending response');

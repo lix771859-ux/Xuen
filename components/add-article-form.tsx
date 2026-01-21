@@ -1,28 +1,48 @@
-import { db } from "@/src/lib/prisma";
-import { createArticle } from "@/src/lib/queries";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function AddArticleForm() {
   const [title, setTitle] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const supabase = createClient();
+  const { toast } = useToast();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title) return;
+    if (!title.trim()) {
+      toast({
+        title: "错误",
+        description: "请输入文章标题",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Hier fügst du den neuen Artikel über Supabase hinzu.
-    //const { data, error } = await supabase.from("articles").insert([{ title }]);
-    const c = await supabase.auth.getUser();
-    console.log("User data");
-    console.log(c.data);
-    const data = await createArticle(title);
+    setIsSubmitting(true);
+    try {
+      const { data, error } = await supabase
+        .from("articles")
+        .insert([{ title: title.trim() }])
+        .select();
 
-    if (data) {
+      if (error) throw error;
+
       console.log("Article added:", data);
-      setTitle(""); // Formular zurücksetzen
-    } else {
-      console.error("Unable to fetch data");
+      setTitle("");
+      toast({
+        title: "成功",
+        description: "文章已添加",
+      });
+    } catch (error) {
+      console.error("Error adding article:", error);
+      toast({
+        title: "错误",
+        description: "添加文章失败，请重试",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -31,9 +51,9 @@ export default function AddArticleForm() {
       <div>
         <label
           htmlFor="title"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium mb-2"
         >
-          Titel
+          文章标题
         </label>
         <input
           type="text"
@@ -41,15 +61,16 @@ export default function AddArticleForm() {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          placeholder="Gib den Titel des Artikels ein"
+          className="w-full px-3 py-2 border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+          placeholder="输入文章标题"
         />
       </div>
       <button
         type="submit"
-        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        disabled={isSubmitting}
+        className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity font-medium disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Artikel hinzufügen
+        {isSubmitting ? "添加中..." : "添加文章"}
       </button>
     </form>
   );
