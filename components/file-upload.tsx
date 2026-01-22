@@ -56,8 +56,20 @@ const FileUpload = ({ apiEndpoint, onChange, value }: Props) => {
     onDrop,
     accept: {
       "image/png": [".png"],
-      "image/jpeg": [],
+      "image/jpeg": [".jpg", ".jpeg"],
+      "image/webp": [".webp"],
       "application/pdf": [".pdf"],
+      // Word 文档
+      "application/msword": [".doc"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+      // Excel 表格
+      "application/vnd.ms-excel": [".xls"],
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
+      // PowerPoint 演示文稿
+      "application/vnd.ms-powerpoint": [".ppt"],
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"],
+      // 文本文件
+      "text/plain": [".txt"],
     },
     maxFiles: 1,
   });
