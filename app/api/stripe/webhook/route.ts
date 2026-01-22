@@ -51,9 +51,11 @@ export async function POST(req: Request) {
     }
 
     console.log('✅ Event received, type:', event.type);
+    console.log('📋 Full event data:', JSON.stringify(event, null, 2));
 
     // ✅ 处理事件
     if (event.type === 'checkout.session.completed') {
+      console.log('🎯 进入 checkout.session.completed 处理逻辑');
       const session = event.data.object as Stripe.Checkout.Session;
       console.log('💰 Checkout completed:', session.id);
       
@@ -86,17 +88,19 @@ export async function POST(req: Request) {
         console.error('❌ 数据库错误:', dbError);
       }
       
-      // 📧 异步发送邮件（不阻塞响应）
+      // 📧 发送邮件（同步等待，确保完成）
       const emailTo = process.env.NODE_ENV === 'production' 
         ? customerEmail || 'lix771859@gmail.com'
         : 'lix771859@gmail.com';
       
       console.log('📧 准备发送邮件到:', emailTo);
       
-      // 不等待邮件发送完成，立即返回响应
-      sendPaymentSuccessEmail(emailTo, amount, session.id)
-        .then(() => console.log('✅ 邮件发送成功'))
-        .catch((err) => console.error('❌ 邮件发送失败:', err));
+      try {
+        await sendPaymentSuccessEmail(emailTo, amount, session.id);
+        console.log('✅ 邮件发送成功');
+      } catch (emailError) {
+        console.error('❌ 邮件发送失败:', emailError);
+      }
     }
 
     console.log('📤 Sending response');
