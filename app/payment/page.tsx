@@ -16,7 +16,8 @@ export default function CheckoutPage() {
     setError('');
 
     try {
-      const response = await fetch('/api/stripe/create-payment-intent', {
+      // 使用 Checkout Session 而不是 Payment Intent
+      const response = await fetch('/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,9 +34,10 @@ export default function CheckoutPage() {
         throw new Error(data.error || 'Payment failed');
       }
 
-      // 这里可以使用 clientSecret 集成 Stripe Elements
-      console.log('Payment intent created:', data.clientSecret);
-      alert('支付意图已创建！请查看控制台');
+      // 跳转到 Stripe Checkout 页面
+      if (data.url) {
+        window.location.href = data.url;
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
