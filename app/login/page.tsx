@@ -1,13 +1,15 @@
 "use client";
 import Link from "next/link";
+import { Suspense } from "react";
 import { SubmitButton } from "./submit-button";
 import { signIn, signUp, signInWithGoogleOAuth } from "./actions";
 import { createClient } from "@/utils/supabase/client";
 import { useSearchParams } from "next/navigation";
 
-export default function Login() {
+function LoginForm() {
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
+  
   const handleSignInWithGoogle = async () => {
     try {
       await signInWithGoogleOAuth();
@@ -30,6 +32,7 @@ export default function Login() {
     if (data) alert("Recovery Link sent to " + email);
     if (error) alert("Error while sending password reset link to " + email);
   };
+  
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <Link
@@ -109,5 +112,13 @@ export default function Login() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={<div className="flex-1 flex justify-center items-center">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

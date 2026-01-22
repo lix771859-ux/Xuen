@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import AccountSettings from "@/components/AccountSettings";
 
 export default async function ProtectedPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
