@@ -106,7 +106,7 @@ function LoginForm() {
 
         <button
           onClick={handleSignInWithGoogle}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+          className="border border-foreground/20 rounded-xl px-4 py-2 text-foreground mb-2"
         >
           Sign In with Google
         </button>
