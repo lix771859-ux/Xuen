@@ -55,13 +55,19 @@ function LoginForm() {
         </svg>{" "}
         Back
       </Link>
+      
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
+        <p className="text-muted-foreground">Sign in to your account to continue</p>
+      </div>
+      
       <div className="flex flex-col gap-9 ">
         <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
           <label className="text-md" htmlFor="email">
             Email
           </label>
           <input
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
+            className="rounded-xl px-4 py-2 bg-inherit border mb-6"
             name="email"
             placeholder="you@example.com"
             required
@@ -70,7 +76,7 @@ function LoginForm() {
             Password
           </label>
           <input
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
+            className="rounded-xl px-4 py-2 bg-inherit border mb-6"
             type="password"
             name="password"
             placeholder="••••••••"
@@ -78,14 +84,14 @@ function LoginForm() {
           />
           <SubmitButton
             formAction={signIn}
-            className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
+            className="bg-green-700 rounded-xl px-4 py-2 text-foreground mb-2"
             pendingText="Signing In..."
           >
             Sign In
           </SubmitButton>
           <SubmitButton
             formAction={signUp}
-            className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+            className="border border-foreground/20 rounded-xl px-4 py-2 text-foreground mb-2"
             pendingText="Signing Up..."
           >
             Sign Up

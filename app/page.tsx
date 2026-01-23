@@ -14,30 +14,30 @@ export default async function Index() {
         <Header />
         <main className="flex-1 flex flex-col gap-6">
           <div className="flex flex-col gap-6 py-8">
-            <h1 className="text-4xl font-bold text-center">欢迎使用 Next.js + Supabase</h1>
+            <h1 className="text-4xl font-bold text-center">Welcome to Next.js + Supabase</h1>
             <p className="text-xl text-center text-muted-foreground">
-              这是一个使用 Next.js 14、Supabase 和 shadcn/ui 构建的模板项目
+              A template project built with Next.js 14, Supabase and shadcn/ui
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <div className="p-6 border rounded-lg bg-card">
-                <h3 className="text-lg font-semibold mb-2">🔐 身份验证</h3>
+                <h3 className="text-lg font-semibold mb-2">🔐 Authentication</h3>
                 <p className="text-sm text-muted-foreground">
-                  完整的用户认证系统，包括登录、注册、密码重置等功能
+                  Complete user authentication system including login, registration, password reset and more
                 </p>
               </div>
               
               <div className="p-6 border rounded-lg bg-card">
-                <h3 className="text-lg font-semibold mb-2">💳 支付集成</h3>
+                <h3 className="text-lg font-semibold mb-2">💳 Payment Integration</h3>
                 <p className="text-sm text-muted-foreground">
-                  Stripe 支付集成，支持订阅和一次性支付
+                  Stripe payment integration supporting subscriptions and one-time payments
                 </p>
               </div>
               
               <div className="p-6 border rounded-lg bg-card">
-                <h3 className="text-lg font-semibold mb-2">🎨 UI 组件</h3>
+                <h3 className="text-lg font-semibold mb-2">🎨 UI Components</h3>
                 <p className="text-sm text-muted-foreground">
-                  shadcn/ui 组件库，提供美观的界面组件
+                  shadcn/ui component library providing beautiful interface components
                 </p>
               </div>
             </div>
@@ -47,13 +47,13 @@ export default async function Index() {
                 href="/protected"
                 className="px-6 py-3 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity"
               >
-                查看受保护页面
+                View Protected Page
               </a>
               <a
                 href="/articles/client"
                 className="px-6 py-3 border border-border rounded-md hover:bg-accent transition-colors"
               >
-                浏览文章
+                Browse Articles
               </a>
             </div>
           </div>
