@@ -41,8 +41,8 @@ const AccountSettings = (props: Props) => {
       } = await supabase.auth.getUser();
       setUser(user);
       setChangedEmail(user?.email ?? "");
-      setAvatarUrl(user?.user_metadata.picture);
-      setName(user?.user_metadata.name);
+      setAvatarUrl(user?.user_metadata.picture ?? "");
+      setName(user?.user_metadata.name ?? "");
     };
     initUser();
   }, []);
@@ -87,7 +87,7 @@ const AccountSettings = (props: Props) => {
 
   return (
     <>
-      <h2 className="font-bold text-4xl mb-4 text-white">Account</h2>
+      <h2 className="font-bold text-4xl mb-4 -mt-16 sm:mt-0 text-white">Account</h2>
 
       <Card>
         <CardHeader>
