@@ -21,7 +21,7 @@ export default async function AuthButton() {
   return user ? (
     <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-between">
       <div className="flex items-center gap-2 sm:gap-4">
-        <span className="text-sm sm:text-base">Hey, {user.email}!</span>
+        <span>Hey, {user.email}!</span>
         <ThemeToggle />
       </div>
       <div>
