@@ -10,7 +10,7 @@ export default async function Index() {
         </div>
       </nav>
 
-      <div className="animate-in flex-1 flex flex-col gap-20 max-w-4xl px-3">
+      <div className="animate-in flex-1 flex flex-col gap-2 max-w-4xl px-3">
         <Header />
         <main className="flex-1 flex flex-col gap-6">
           <div className="flex flex-col gap-6 py-8">
